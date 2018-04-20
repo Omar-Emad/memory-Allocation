@@ -3,8 +3,13 @@ package sample;
 public class hole {
 
     private int startAddress;
-    private int endAddress;
+
     private int size;
+    private int endAddress=startAddress+size;
+
+    public hole() {
+
+    }
 
     public hole(int startAddress, int size) {
         this.startAddress = startAddress;

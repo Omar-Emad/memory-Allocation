@@ -6,13 +6,16 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.awt.image.SampleModel;
 import java.util.Vector;
 
 public class Main extends Application implements EventHandler<ActionEvent> {
@@ -39,7 +42,8 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     Label options=new Label("Choose the Method of Allocation");
     RadioButton FirstFit=new RadioButton("FirstFit");
     RadioButton BestFit=new RadioButton("BestFit");
-
+    Vector<process>Processes=new Vector<process>();
+    Vector<hole> Holes=new Vector<hole>();
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -59,7 +63,10 @@ public class Main extends Application implements EventHandler<ActionEvent> {
         options.setStyle("-fx-text-fill: linear-gradient(#ce1212,#e0580f);");
         Save.setText("Save");
         Allocate.setText("Allocate");
+        Save.setOnAction(this);
         DeAllocate.setText("DeAllocate");
+        Allocate.setOnAction(this);
+        DeAllocate.setOnAction(this);
         Allocation.setPromptText("Enter Process Name to Allocate ");
         DeAllocation.setPromptText("Enter Process Name to DeAllocate ");
         FirstFit.setToggleGroup(Options);
@@ -184,7 +191,58 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
 
+      if(event.getSource()==Save)
+      {
+          Processes.clear();
+          Holes.clear();
+          for (int i = 1; i <=noProcesses ; i++)
+          {  process buffer=new process();
+              HBox b=new HBox();
+              Node hbox=AllProcesses.getChildren().get(i);
+              if(hbox instanceof HBox) {
+                  Node counter = ((HBox) hbox).getChildren().get(1);
+                  if (counter instanceof TextField) {
+                      buffer.setName(((TextField) counter).getText());
+                  }
+                  counter = ((HBox) hbox).getChildren().get(2);
+                  if (counter instanceof TextField) {
+                      try{buffer.setSize(Integer.parseInt(((TextField) counter).getText()));}
+                      catch(NumberFormatException e)
+                      {
+                          buffer.setSize(0);
+                      }
+                  }
+              }
+              Processes.add(buffer);
 
+          }
+          for (int i = 1; i <=noHoles ; i++)
+          {  hole buffer=new hole();
+              HBox b=new HBox();
+              Node hbox=AllHoles.getChildren().get(i);
+              if(hbox instanceof HBox) {
+                  Node counter = ((HBox) hbox).getChildren().get(1);
+                  if (counter instanceof TextField) {
+                     try{ buffer.setStartAddress(Integer.parseInt(((TextField) counter).getText()));}
+                     catch(NumberFormatException e)
+                     {
+                         buffer.setStartAddress(0);
+                     }
+                  }
+                  counter = ((HBox) hbox).getChildren().get(2);
+                  if (counter instanceof TextField) {
+                      try{buffer.setSize(Integer.parseInt(((TextField) counter).getText()));}
+                      catch(NumberFormatException e) {
+                          buffer.setSize(0);
+                      }
+                  }
+              }
+              Holes.add(buffer);
+
+          }
+
+
+      }
 
     }
 
