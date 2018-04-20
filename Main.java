@@ -18,13 +18,6 @@ import java.util.Vector;
 public class Main extends Application implements EventHandler<ActionEvent>  {
 
 
-
-
-
-
-
-
-
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -68,6 +61,7 @@ public class Main extends Application implements EventHandler<ActionEvent>  {
             }
         }
     }
+    
 
     @Override
     public void handle(ActionEvent event) {
