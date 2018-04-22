@@ -1,4 +1,4 @@
-package sample;
+
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -45,11 +45,14 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     RadioButton BestFit=new RadioButton("BestFit");
     Vector<process>Processes=new Vector<process>();
     Vector<hole> Holes=new Vector<hole>();
+
     Vector<process> Allocatedprocesses=new Vector<process>();
     ArrayList<String> names = new ArrayList<String >();
     Stage window=new Stage();
+
     String AllocatedName;
     String DeAllocatedName;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
 
