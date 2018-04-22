@@ -20,6 +20,7 @@ import java.util.Vector;
 
 public class Main extends Application implements EventHandler<ActionEvent> {
     GridPane Main=new GridPane();
+    boolean saved=false;
     GridPane AllProcesses=new GridPane();
     GridPane AllHoles=new GridPane();
     Label noOfProcessesLabel=new Label("No. of Processes:");
@@ -32,7 +33,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     int noHoles;
     ScrollPane ss;
     ScrollPane sa;
-    Label SavingData=new Label("Press Save button to Confirm Processes and Holes");
+    Label SavingData=new Label("Press Save button To Save the contents of the Tables before allocation");
     Button Save=new Button();
     TextField Allocation=new TextField();
     TextField DeAllocation=new TextField();
@@ -45,13 +46,16 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     Vector<process>Processes=new Vector<process>();
     Vector<hole> Holes=new Vector<hole>();
 
+    Vector<process> Allocatedprocesses=new Vector<process>();
+    Stage window=new Stage();
+
     @Override
     public void start(Stage primaryStage) throws Exception{
 
 
         Main.setPadding(new Insets(30, 30, 30, 30));
         Main.setVgap(20);
-        Main.setHgap(100);
+        Main.setHgap(20);
         noOfProcessesLabel.setFont(new Font("Arial", 17));
         noOfProcessesLabel.setStyle("-fx-text-fill: linear-gradient(#ce1212,#e0580f);");
         noOfHolesLabel.setFont(new Font("Arial", 17));
@@ -194,6 +198,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 
       if(event.getSource()==Save)
       {
+          saved=true;
           Processes.clear();
           Holes.clear();
           for (int i = 1; i <=noProcesses ; i++)
@@ -244,7 +249,76 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 
 
       }
+      if(event.getSource()==Allocate) {
+          if (saved == false) {
+              Label l = new Label("Fill Tables and Press Save first befora allocation");
+              AlertBox1.display(l);
+          } else {
+              int toBeAllocated = 0;
+              boolean FoundProcess = false;
+              String Name = Allocation.getText();
+              boolean Allocated = false;
+              for (int i = 0; i < noProcesses; i++) {
+                  if (Processes.elementAt(i).getName().equals(Name)) {
+                      toBeAllocated = i;
+                      FoundProcess = true;
+                      break;
+                  }
+              }
+              if (FoundProcess == false) {
+                  Label l = new Label("No Process with such Name is Found");
+                  AlertBox1.display(l);
+              } else if (Processes.elementAt(toBeAllocated).getStartAddress() != -1) {
+                  Label l = new Label("This Process is already allocated");
+                  AlertBox1.display(l);
+              } else if (FirstFit.isSelected()) {
+                  sort(Holes, "FF");
+                  for (int i = 0; i < noHoles; i++) {
+                      if (Holes.elementAt(i).getSize() >= Processes.elementAt(toBeAllocated).getSize()) {
+                          Allocated = true;
+                          Allocatedprocesses.add(Processes.elementAt(toBeAllocated));
+                          Processes.elementAt(toBeAllocated).setStartAddress(Holes.elementAt(i).getStartAddress());
+                          if (Holes.elementAt(i).getSize() == Processes.elementAt(toBeAllocated).getSize()) {
+                              Holes.remove(i);
+                          } else {
+                              Holes.elementAt(i).setSize(Holes.elementAt(i).getSize() - Processes.elementAt(toBeAllocated).getSize());
+                          }
+                          break;
+                      }
+                  }
+                  if (Allocated == false) {
+                      Label l = new Label("No Holes has the required size for this process");
+                      AlertBox1.display(l);
+                  } else {
+                      window.close();
+                      ResultWindow.display(Holes, Allocatedprocesses, window);
+                  }
+              } else if (BestFit.isSelected()) {
+                  sort(Holes, "BF");
+                  for (int i = 0; i < noHoles; i++) {
+                      if (Holes.elementAt(i).getSize() >= Processes.elementAt(toBeAllocated).getSize()) {
+                          Allocated = true;
+                          Allocatedprocesses.add(Processes.elementAt(toBeAllocated));
+                          Processes.elementAt(toBeAllocated).setStartAddress(Holes.elementAt(i).getStartAddress());
+                          if (Holes.elementAt(i).getSize() == Processes.elementAt(toBeAllocated).getSize()) {
+                              Holes.remove(i);
+                          } else {
+                              Holes.elementAt(i).setSize(Holes.elementAt(i).getSize() - Processes.elementAt(toBeAllocated).getSize());
+                          }
+                          break;
+                      }
+                  }
+                  if (Allocated == false) {
+                      Label l = new Label("No Holes has the required size for this process");
+                      AlertBox1.display(l);
+                  } else {
+                      window.close();
+                      ResultWindow.display(Holes, Allocatedprocesses, window);
 
+                  }
+              }
+          }
+      }
     }
 
 
