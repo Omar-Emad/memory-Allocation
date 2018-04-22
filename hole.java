@@ -5,7 +5,7 @@ public class hole {
     private int startAddress;
 
     private int size;
-    private int endAddress=startAddress+size;
+    private int endAddress;
 
     public hole() {
 
@@ -26,7 +26,7 @@ public class hole {
     }
 
     public int getEndAddress() {
-        return endAddress;
+        return startAddress+size;
     }
 
     public void setEndAddress(int endAddress) {
