@@ -18,16 +18,17 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Vector;
 
+
 public class Main extends Application implements EventHandler<ActionEvent> {
     GridPane Main=new GridPane();
     boolean saved=false;
     GridPane AllProcesses=new GridPane();
     GridPane AllHoles=new GridPane();
-    Label noOfProcessesLabel=new Label("No. of Processes:");
+    Label noOfProcessesLabel=new Label("No. of Processes   ");
     TextField noOfProcessesTextField=new TextField();
     HBox Process=new HBox();
     HBox Hole=new HBox();
-    Label noOfHolesLabel = new Label("No. of Holes :");
+    Label noOfHolesLabel = new Label("No. of Holes   ");
     TextField noOfHolesTextField=new TextField();
     int noProcesses ;
     int noHoles;
@@ -40,7 +41,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     Button Allocate=new Button();
     Button DeAllocate =new Button();
     ToggleGroup Options=new ToggleGroup();
-    Label options=new Label("Choose the Method of Allocation");
+    Label options=new Label("Allocation Method");
     RadioButton FirstFit=new RadioButton("FirstFit");
     RadioButton BestFit=new RadioButton("BestFit");
     Vector<process>Processes=new Vector<process>();
@@ -51,49 +52,54 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     Stage window=new Stage();
 
     String AllocatedName;
-    String DeAllocatedName;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
 
         Allocation.setEditable(false);
         DeAllocation.setEditable(false);
         Allocation.setPromptText("Allocated Process Name");
         DeAllocation.setPromptText("DeAllocated Process Name");
-        Main.setPadding(new Insets(30, 30, 30, 30));
+        Main.setPadding(new Insets(40, 40, 40, 40));
         Main.setVgap(20);
-        Main.setHgap(20);
-        noOfProcessesLabel.setFont(new Font("Arial", 17));
-        noOfProcessesLabel.setStyle("-fx-text-fill: linear-gradient(#ce1212,#e0580f);");
-        noOfHolesLabel.setFont(new Font("Arial", 17));
-        noOfHolesLabel.setStyle("-fx-text-fill: linear-gradient(#ce1212,#e0580f);");
+        Main.setHgap(30);
+        Main.setStyle("-fx-background-color: #eae5e5;");
+        noOfProcessesLabel.setStyle("-fx-font: 20 arial;  -fx-text-fill: #8f12ce; -fx-font-weight: bold;");
+        noOfHolesLabel.setStyle("-fx-font: 20 arial;  -fx-text-fill: #8f12ce; -fx-font-weight: bold;");
+        noOfHolesTextField.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
+        noOfProcessesTextField.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
+        FirstFit.setStyle("-fx-font: 16 arial;  -fx-text-fill: #000000;");
+        BestFit.setStyle("-fx-font: 16 arial;  -fx-text-fill: #000000;");
         Hole.getChildren().addAll(noOfHolesLabel,noOfHolesTextField);
         Process.getChildren().addAll(noOfProcessesLabel,noOfProcessesTextField);
         SavingData.setFont(new Font("Arial", 17));
-        SavingData.setStyle("-fx-text-fill: linear-gradient(#ce1212,#e0580f);");
-        options.setFont(new Font("Arial", 17));
-        options.setStyle("-fx-text-fill: linear-gradient(#ce1212,#e0580f);");
+        options.setStyle("-fx-font: 20 arial;  -fx-text-fill: #8f12ce; -fx-font-weight: bold;");
+        Save.setStyle("-fx-font: 17 arial; -fx-background-color: linear-gradient(#8f12ce,#eae5e5) ;  -fx-text-fill: #1c1b1b; -fx-background-radius: 7;");
+        Allocate.setStyle("-fx-font: 17 arial; -fx-background-color: linear-gradient(#8f12ce,#eae5e5) ;  -fx-text-fill: #1c1b1b; -fx-background-radius: 7;");
+        DeAllocate.setStyle("-fx-font: 17 arial; -fx-background-color: linear-gradient(#8f12ce,#eae5e5) ;  -fx-text-fill: #1c1b1b; -fx-background-radius: 7;");
         Save.setText("Save");
         Allocate.setText("Allocate");
         Save.setOnAction(this);
         DeAllocate.setText("DeAllocate");
         Allocate.setOnAction(this);
         DeAllocate.setOnAction(this);
-        Allocation.setPromptText("Enter Process Name to Allocate ");
-        DeAllocation.setPromptText("Enter Process Name to DeAllocate ");
+        Allocation.setPromptText("Allocate Process ");
+        Allocation.setStyle("-fx-font: 15 arial; ");
+        DeAllocation.setPromptText("DeAllocate Process ");
+        DeAllocation.setStyle("-fx-font: 15 arial; ");
         FirstFit.setToggleGroup(Options);
         BestFit.setToggleGroup(Options);
-        Main.add(Hole,0,0);
-        Main.add(Process,1,0);
-        Main.add(options,0,2);
-        Main.add(FirstFit,1,2);
-        Main.add(BestFit,2,2);
-        Main.add(SavingData,0,3);
-        Main.add(Save,1,3);
-        Main.add(Allocation,0,4);
-        Main.add(Allocate,1,4);
-        Main.add(DeAllocation,0,5);
-        Main.add(DeAllocate,1,5);
+        Main.add(Hole,0,4);
+        Main.add(Process,3,4);
+        Main.add(options,0,0);
+        Main.add(FirstFit,0,1);
+        Main.add(BestFit,0,2);
+        Main.add(Save,1,8);
+        Main.add(Allocation,0,13);
+        Main.add(Allocate,0,14);
+        Main.add(DeAllocation,0,15);
+        Main.add(DeAllocate,0,16);
         noOfHolesTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable,
@@ -102,28 +108,37 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 
 
                 AllHoles.getChildren().clear();
+                AllHoles.setVgap(10);
+                AllHoles.setHgap(10);
+                AllHoles.setPadding(new Insets(10,10,10,10));
                 try {noHoles=Integer.parseInt(noOfHolesTextField.getText());}
                 catch (NumberFormatException e)
                 {noHoles=0;}
                 Label size=new Label("Hole Size");
-                Label start=new Label("        Hole Starting Address        ");
-                Label l =new Label("   ");
+                size.setStyle("-fx-font: 16 arial;  -fx-text-fill: #000000; ");
+                Label start=new Label("      Hole Starting Address             ");
+                start.setStyle("-fx-font: 16 arial;  -fx-text-fill: #000000; ");
                 HBox v=new HBox();
-                v.getChildren().addAll(l,start,size);
+                v.getChildren().addAll(start,size);
                 AllHoles.add(v,0,0);
                 for (int i = 1; i <=noHoles ; i++) {
+                    Label l=new Label("     ");
+                    Label lll=new Label("   ");
                     TextField Start =new TextField();
+                    Start.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
                     TextField Size=new TextField() ;
+                    Size.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
                     Label ll =new Label(Integer.toString(i));
+                    ll.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
                     HBox vv=new HBox();
-                    vv.getChildren().addAll(ll,Start,Size);
+                    vv.getChildren().addAll(ll,lll,Start,l,Size);
                     AllHoles.add(vv,0,i);
 
 
                 }
                 ss=new ScrollPane(AllHoles);
                 ss.setFitToHeight(true);
-                Main.add(ss,0,1);
+                Main.add(ss,0,5);
             }
         });
         noOfProcessesTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -131,19 +146,27 @@ public class Main extends Application implements EventHandler<ActionEvent> {
             public void changed(ObservableValue<? extends String> observable,
                                 String oldValue, String newValue) {
                 names.clear();
+                AllHoles.setPadding(new Insets(10,10,10,10));
                 AllProcesses.getChildren().clear();
+                AllProcesses.setVgap(10);
+                //AllProcesses.setHgap(2);
+                AllProcesses.setPadding(new Insets(10,10,10,10));
                 try {noProcesses=Integer.parseInt(noOfProcessesTextField.getText());}
                 catch (NumberFormatException e)
                 {noProcesses=0;}
                 Label size=new Label("Process Size");
-                Label name=new Label("Process Name    ");
+                size.setStyle("-fx-font: 16 arial;  -fx-text-fill: #000000; ");
+                Label name=new Label("Name                ");
+                name.setStyle("-fx-font: 16 arial;  -fx-text-fill: #000000; ");
                 HBox v=new HBox();
                 v.getChildren().addAll(name,size);
                 AllProcesses.add(v,0,0);
                 for (int i = 1; i <=noProcesses ; i++) {
                     Label Name =new Label ("P"+(i-1));
+                    Name.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
                     names.add("P"+(i-1));
                     TextField Size=new TextField() ;
+                    Size.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
                     HBox vv=new HBox();
                     vv.getChildren().addAll(Name,Size);
                     vv.setSpacing(80);
@@ -153,7 +176,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                 }
                 sa=new ScrollPane(AllProcesses);
                 sa.setFitToHeight(true);
-                Main.add(sa,1,1);
+                Main.add(sa,3,5);
             }
         });
 
