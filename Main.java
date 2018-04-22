@@ -1,4 +1,4 @@
-
+package sample;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -121,7 +121,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 
 
                 }
-                 ss=new ScrollPane(AllHoles);
+                ss=new ScrollPane(AllHoles);
                 ss.setFitToHeight(true);
                 Main.add(ss,0,1);
             }
@@ -203,156 +203,219 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
 
-      if(event.getSource()==Save)
-      {
-          saved=true;
+        if(event.getSource()==Save)
+        {
+            saved=true;
 
 
-              Processes.clear();
-              Holes.clear();
-              for (int i = 1; i <= noProcesses; i++) {
-                  process buffer = new process();
-                  HBox b = new HBox();
-                  Node hbox = AllProcesses.getChildren().get(i);
-                  if (hbox instanceof HBox) {
-                      Node counter = ((HBox) hbox).getChildren().get(0);
-                      if (counter instanceof Label) {
-                          buffer.setName(((Label) counter).getText());
-                      }
-                      counter = ((HBox) hbox).getChildren().get(1);
-                      if (counter instanceof TextField) {
-                          try {
-                              buffer.setSize(Integer.parseInt(((TextField) counter).getText()));
-                          } catch (NumberFormatException e) {
-                              buffer.setSize(0);
-                          }
-                      }
-                  }
-                  Processes.add(buffer);
+            Processes.clear();
+            Holes.clear();
+            for (int i = 1; i <= noProcesses; i++) {
+                process buffer = new process();
+                HBox b = new HBox();
+                Node hbox = AllProcesses.getChildren().get(i);
+                if (hbox instanceof HBox) {
+                    Node counter = ((HBox) hbox).getChildren().get(0);
+                    if (counter instanceof Label) {
+                        buffer.setName(((Label) counter).getText());
+                    }
+                    counter = ((HBox) hbox).getChildren().get(1);
+                    if (counter instanceof TextField) {
+                        try {
+                            buffer.setSize(Integer.parseInt(((TextField) counter).getText()));
+                        } catch (NumberFormatException e) {
+                            buffer.setSize(0);
+                        }
+                    }
+                }
+                Processes.add(buffer);
 
-              }
-              for (int i = 1; i <= noHoles; i++) {
-                  hole buffer = new hole();
-                  HBox b = new HBox();
-                  Node hbox = AllHoles.getChildren().get(i);
-                  if (hbox instanceof HBox) {
-                      Node counter = ((HBox) hbox).getChildren().get(1);
-                      if (counter instanceof TextField) {
-                          try {
-                              buffer.setStartAddress(Integer.parseInt(((TextField) counter).getText()));
-                          } catch (NumberFormatException e) {
-                              buffer.setStartAddress(0);
-                          }
-                      }
-                      counter = ((HBox) hbox).getChildren().get(2);
-                      if (counter instanceof TextField) {
-                          try {
-                              buffer.setSize(Integer.parseInt(((TextField) counter).getText()));
-                          } catch (NumberFormatException e) {
-                              buffer.setSize(0);
-                          }
-                      }
-                  }
-                  Holes.add(buffer);
+            }
+            for (int i = 1; i <= noHoles; i++) {
+                hole buffer = new hole();
+                HBox b = new HBox();
+                Node hbox = AllHoles.getChildren().get(i);
+                if (hbox instanceof HBox) {
+                    Node counter = ((HBox) hbox).getChildren().get(1);
+                    if (counter instanceof TextField) {
+                        try {
+                            buffer.setStartAddress(Integer.parseInt(((TextField) counter).getText()));
+                        } catch (NumberFormatException e) {
+                            buffer.setStartAddress(0);
+                        }
+                    }
+                    counter = ((HBox) hbox).getChildren().get(2);
+                    if (counter instanceof TextField) {
+                        try {
+                            buffer.setSize(Integer.parseInt(((TextField) counter).getText()));
+                        } catch (NumberFormatException e) {
+                            buffer.setSize(0);
+                        }
+                    }
+                }
+                Holes.add(buffer);
 
-              }
-          sort(Holes,"FF");
-          boolean error=false;
-          for (int i = 0; i <noHoles-1 ; i++) {
-              for (int j = i+1; j <noHoles ; j++) {
-                  if(Holes.elementAt(i).getEndAddress()>Holes.elementAt(j).getStartAddress())
-                  {
-                      error=true;
-                      break;
-                  }
-              }
-          }
-          if(error==true){ Label l = new Label("Holes Overlap ! Please enter the right starts and sizes of holes");
-              AlertBox1.display(l);
-          saved =false;
-          }
-          else
-          {
+            }
+            sort(Holes,"FF");
+            boolean error=false;
+            for (int i = 0; i <noHoles-1 ; i++) {
+                for (int j = i+1; j <noHoles ; j++) {
+                    if(Holes.elementAt(i).getEndAddress()>Holes.elementAt(j).getStartAddress())
+                    {
+                        error=true;
+                        break;
+                    }
+                }
+            }
+            if(error==true){ Label l = new Label("Holes Overlap ! Please enter the right starts and sizes of holes");
+                AlertBox1.display(l);
+                saved =false;
+            }
+            else
+            {
 
-              ObservableList<String> Process =
-                      FXCollections.observableArrayList(names);
-              Allocation.setItems(Process);
-              DeAllocation.setItems(Process);
+                ObservableList<String> Process =
+                        FXCollections.observableArrayList(names);
+                Allocation.setItems(Process);
+                DeAllocation.setItems(Process);
 
-          }
+            }
 
 
-      }
-      if(event.getSource()==Allocate) {
-          if (saved == false) {
-              Label l = new Label("Fill Tables  and Press Save first before allocation");
-              AlertBox1.display(l);
-          } else {
-              int toBeAllocated = 0;
-              boolean FoundProcess = false;
-              AllocatedName=Allocation.getValue().toString();
-              boolean Allocated = false;
-                  for (int i = 0; i < noProcesses; i++) {
-                      if (Processes.elementAt(i).getName().equals(AllocatedName)) {
-                          toBeAllocated = i;
-                          FoundProcess = true;
-                          break;
-                      }
-                  }
-                  if (FoundProcess == false) {
-                      Label l = new Label("No Process with such Name is Found");
-                      AlertBox1.display(l);
-                  } else if (Processes.elementAt(toBeAllocated).getStartAddress() != -1) {
-                      Label l = new Label("This Process is already allocated");
-                      AlertBox1.display(l);
-                  } else if (FirstFit.isSelected()) {
-                  sort(Holes, "FF");
-                  for (int i = 0; i < noHoles; i++) {
-                      if (Holes.elementAt(i).getSize() >= Processes.elementAt(toBeAllocated).getSize()) {
-                          Allocated = true;
-                          Allocatedprocesses.add(Processes.elementAt(toBeAllocated));
-                          Processes.elementAt(toBeAllocated).setStartAddress(Holes.elementAt(i).getStartAddress());
-                          if (Holes.elementAt(i).getSize() == Processes.elementAt(toBeAllocated).getSize()) {
-                              Holes.remove(i);
-                          } else {
-                              Holes.elementAt(i).setSize(Holes.elementAt(i).getSize() - Processes.elementAt(toBeAllocated).getSize());
-                          }
-                          break;
-                      }
-                  }
-                  if (Allocated == false) {
-                      Label l = new Label("No Holes has the required size for this process");
-                      AlertBox1.display(l);
-                  } else {
-                      window.close();
-                      ResultWindow.display(Holes, Allocatedprocesses, window);
-                  }
-              } else if (BestFit.isSelected()) {
-                  sort(Holes, "BF");
-                  for (int i = 0; i < noHoles; i++) {
-                      if (Holes.elementAt(i).getSize() >= Processes.elementAt(toBeAllocated).getSize()) {
-                          Allocated = true;
-                          Allocatedprocesses.add(Processes.elementAt(toBeAllocated));
-                          Processes.elementAt(toBeAllocated).setStartAddress(Holes.elementAt(i).getStartAddress());
-                          if (Holes.elementAt(i).getSize() == Processes.elementAt(toBeAllocated).getSize()) {
-                              Holes.remove(i);
-                          } else {
-                              Holes.elementAt(i).setSize(Holes.elementAt(i).getSize() - Processes.elementAt(toBeAllocated).getSize());
-                          }
-                          break;
-                      }
-                  }
-                  if (Allocated == false) {
-                      Label l = new Label("No Holes has the required size for this process");
-                      AlertBox1.display(l);
-                  } else {
-                      window.close();
-                      ResultWindow.display(Holes, Allocatedprocesses, window);
+        }
+        if(event.getSource()==Allocate) {
+            if (saved == false) {
+                Label l = new Label("Fill Tables  and Press Save first before allocation");
+                AlertBox1.display(l);
+            } else {
+                int toBeAllocated = 0;
+                boolean FoundProcess = false;
+                AllocatedName=Allocation.getValue().toString();
+                boolean Allocated = false;
+                for (int i = 0; i < noProcesses; i++) {
+                    if (Processes.elementAt(i).getName().equals(AllocatedName)) {
+                        toBeAllocated = i;
+                        FoundProcess = true;
+                        break;
+                    }
+                }
+                if (FoundProcess == false) {
+                    Label l = new Label("No Process with such Name is Found");
+                    AlertBox1.display(l);
+                } else if (Processes.elementAt(toBeAllocated).getStartAddress() != -1) {
+                    Label l = new Label("This Process is already allocated");
+                    AlertBox1.display(l);
+                } else if (FirstFit.isSelected()) {
+                    sort(Holes, "FF");
+                    for (int i = 0; i < noHoles; i++) {
+                        if (Holes.elementAt(i).getSize() >= Processes.elementAt(toBeAllocated).getSize()) {
+                            Allocated = true;
+                            Allocatedprocesses.add(Processes.elementAt(toBeAllocated));
+                            Processes.elementAt(toBeAllocated).setStartAddress(Holes.elementAt(i).getStartAddress());
+                            if (Holes.elementAt(i).getSize() == Processes.elementAt(toBeAllocated).getSize()) {
+                                Holes.remove(i);
+                            } else {
+                                Holes.elementAt(i).setSize(Holes.elementAt(i).getSize() - Processes.elementAt(toBeAllocated).getSize());
+                                Holes.elementAt(i).setStartAddress(Holes.elementAt(i).getStartAddress() + Processes.elementAt(toBeAllocated).getSize());
+                            }
+                            break;
+                        }
+                    }
+                    if (Allocated == false) {
+                        Label l = new Label("No Holes has the required size for this process");
+                        AlertBox1.display(l);
+                    } else {
+                        window.close();
+                        ResultWindow.display(Holes, Allocatedprocesses, window);
+                    }
+                } else if (BestFit.isSelected()) {
+                    sort(Holes, "BF");
+                    for (int i = 0; i < noHoles; i++) {
+                        if (Holes.elementAt(i).getSize() >= Processes.elementAt(toBeAllocated).getSize()) {
+                            Allocated = true;
+                            Allocatedprocesses.add(Processes.elementAt(toBeAllocated));
+                            Processes.elementAt(toBeAllocated).setStartAddress(Holes.elementAt(i).getStartAddress());
+                            if (Holes.elementAt(i).getSize() == Processes.elementAt(toBeAllocated).getSize()) {
+                                Holes.remove(i);
+                            } else {
+                                Holes.elementAt(i).setSize(Holes.elementAt(i).getSize() - Processes.elementAt(toBeAllocated).getSize());
+                                Holes.elementAt(i).setStartAddress(Holes.elementAt(i).getStartAddress() + Processes.elementAt(toBeAllocated).getSize());
+                            }
+                            break;
+                        }
+                    }
+                    if (Allocated == false) {
+                        Label l = new Label("No Holes has the required size for this process");
+                        AlertBox1.display(l);
+                    } else {
+                        window.close();
+                        ResultWindow.display(Holes, Allocatedprocesses, window);
 
-                  }
-              }
-          }
-      }
+                    }
+                }
+            }
+        }
+        if(event.getSource()==DeAllocate)
+        {
+            String userIn=DeAllocation.getValue().toString();
+            boolean holeBefore=false; boolean holeAfter=false;
+            int holes[]=new int[2];   //holes[0] is the index of the hole before process  holes[1] is the hole after
+            System.out.println("Deallocate");
+            for(int i=0;i<Allocatedprocesses.size();i++)
+            {System.out.println(userIn+"     "+Allocatedprocesses.get(i).getName());
+                if(Allocatedprocesses.get(i).getName().equals(userIn))
+                {System.out.println(Allocatedprocesses.get(i).getName());
+                    for(int j=0;j<Holes.size();j++)
+                    {
+                        if(Allocatedprocesses.get(i).getStartAddress()==Holes.get(j).getEndAddress()+1)
+                        {
+                            holeBefore=true;
+                            holes[0]=j;
+                            System.out.println("before");
+                        }
+                        if(Allocatedprocesses.get(i).getEndAddress()==Holes.get(j).getStartAddress()-1)
+                        {
+                            holeAfter=true;
+                            holes[1]=j;
+                            System.out.println("After");
+                        }
+                    }
+                    if(holeBefore&&holeAfter)  // there is hole before and after it
+                    {
+                        Holes.get(holes[0]).setSize(Holes.get(holes[0]).getSize()+
+                                Holes.get(holes[1]).getSize()+ Allocatedprocesses.get(i).getSize());   //set the size of this hole= size of this hole + size of process + size of the hole after the process
+                        Holes.remove(holes[1]);   //remove the hole after the process
+                        System.out.println("before and after");
+                    }
+                    else if(holeBefore)
+                    {
+                        Holes.get(holes[0]).setSize(Holes.get(holes[0]).getSize()+Allocatedprocesses.get(i).getSize());
+                    }
+                    else if(holeAfter)
+                    {
+                        Holes.get(holes[1]).setSize(Holes.get(holes[1]).getSize()+Allocatedprocesses.get(i).getSize());
+                        Holes.get(holes[1]).setStartAddress(Allocatedprocesses.get(i).getStartAddress());
+                    }
+                    else
+                    {
+                        hole buffer=new hole(Allocatedprocesses.get(i).getStartAddress(),Allocatedprocesses.get(i).getSize());
+                        Holes.add(buffer);
+                        System.out.println("new hole");
+                    }
+
+                    Allocatedprocesses.get(i).setStartAddress(-1);
+
+                    Allocatedprocesses.remove(i);
+
+                    sort(Holes,"FF");
+
+                    break;
+                }
+            }
+            window.close();
+            ResultWindow.display(Holes, Allocatedprocesses, window);
+
+        }
     }
 
 

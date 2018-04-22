@@ -29,7 +29,7 @@ public class ResultWindow {
         TableColumn AllocatedBlockProcess = new TableColumn("ProcessAllocatedBy");
         List <hole> ll=l;
         List <process> pp=p;
-       final ObservableList<hole> Hole= FXCollections.observableList(ll);
+        final ObservableList<hole> Hole= FXCollections.observableList(ll);
         final ObservableList<process> Process=FXCollections.observableList(pp);
         HoleStart.setCellValueFactory(new PropertyValueFactory<hole,Integer>("startAddress"));
         HoleSize.setCellValueFactory(new PropertyValueFactory<hole,Integer>("size"));
@@ -44,7 +44,7 @@ public class ResultWindow {
         AllocatedMemory.setMinWidth(100);
 
 
-       // grid.setColumnSpan(AllocatedMemory,2);
+        // grid.setColumnSpan(AllocatedMemory,2);
         grid.add(Holes,0,0);
         grid.add(AllocatedMemory,1,0);
         grid.setHgrow(AllocatedMemory, Priority.ALWAYS);

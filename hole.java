@@ -1,11 +1,11 @@
-
+package sample;
 
 public class hole {
 
     private int startAddress;
 
     private int size;
-    private int endAddress;
+
 
     public hole() {
 
@@ -14,7 +14,6 @@ public class hole {
     public hole(int startAddress, int size) {
         this.startAddress = startAddress;
         this.size = size;
-        this.endAddress = startAddress+size;
     }
 
     public int getStartAddress() {
@@ -26,11 +25,7 @@ public class hole {
     }
 
     public int getEndAddress() {
-        return startAddress+size;
-    }
-
-    public void setEndAddress(int endAddress) {
-        this.endAddress = endAddress;
+        return startAddress+size-1;
     }
 
     public int getSize() {
