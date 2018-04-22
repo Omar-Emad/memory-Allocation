@@ -2,12 +2,32 @@ package sample;
 
 public class process {
 
-    private int size;
-    private int startAddress;
+     int size;
+     int startAddress;
+    String Name ;
+    public process() {
+        startAddress=-1;
+    }
 
     public process(int size, int startAddress) {
         this.size = size;
         this.startAddress = startAddress;
+
+
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public process(int size, int startAddress, String name) {
+        this.size = size;
+        this.startAddress = startAddress;
+        Name = name;
     }
 
     public int getSize() {
@@ -25,6 +45,7 @@ public class process {
     public void setStartAddress(int startAddress) {
         this.startAddress = startAddress;
     }
+
 
 
 }
