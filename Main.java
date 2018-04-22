@@ -3,6 +3,8 @@ package sample;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -11,11 +13,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-import java.awt.image.SampleModel;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class Main extends Application implements EventHandler<ActionEvent> {
@@ -35,8 +35,8 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     ScrollPane sa;
     Label SavingData=new Label("Press Save button To Save the contents of the Tables before allocation");
     Button Save=new Button();
-    TextField Allocation=new TextField();
-    TextField DeAllocation=new TextField();
+    ComboBox Allocation=new ComboBox();
+    ComboBox DeAllocation=new ComboBox();
     Button Allocate=new Button();
     Button DeAllocate =new Button();
     ToggleGroup Options=new ToggleGroup();
@@ -46,11 +46,17 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     Vector<process>Processes=new Vector<process>();
     Vector<hole> Holes=new Vector<hole>();
     Vector<process> Allocatedprocesses=new Vector<process>();
+    ArrayList<String> names = new ArrayList<String >();
     Stage window=new Stage();
+    String AllocatedName;
+    String DeAllocatedName;
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-
+        Allocation.setEditable(false);
+        DeAllocation.setEditable(false);
+        Allocation.setPromptText("Allocated Process Name");
+        DeAllocation.setPromptText("DeAllocated Process Name");
         Main.setPadding(new Insets(30, 30, 30, 30));
         Main.setVgap(20);
         Main.setHgap(20);
@@ -121,23 +127,23 @@ public class Main extends Application implements EventHandler<ActionEvent> {
             @Override
             public void changed(ObservableValue<? extends String> observable,
                                 String oldValue, String newValue) {
-
+                names.clear();
                 AllProcesses.getChildren().clear();
                 try {noProcesses=Integer.parseInt(noOfProcessesTextField.getText());}
                 catch (NumberFormatException e)
                 {noProcesses=0;}
                 Label size=new Label("Process Size");
-                Label name=new Label("        Process Name              ");
-                Label l =new Label("   ");
+                Label name=new Label("Process Name    ");
                 HBox v=new HBox();
-                v.getChildren().addAll(l,name,size);
+                v.getChildren().addAll(name,size);
                 AllProcesses.add(v,0,0);
                 for (int i = 1; i <=noProcesses ; i++) {
-                    TextField Name =new TextField();
+                    Label Name =new Label ("P"+(i-1));
+                    names.add("P"+(i-1));
                     TextField Size=new TextField() ;
-                    Label ll =new Label(Integer.toString(i));
                     HBox vv=new HBox();
-                    vv.getChildren().addAll(ll,Name,Size);
+                    vv.getChildren().addAll(Name,Size);
+                    vv.setSpacing(80);
                     AllProcesses.add(vv,0,i);
 
 
@@ -197,51 +203,78 @@ public class Main extends Application implements EventHandler<ActionEvent> {
       if(event.getSource()==Save)
       {
           saved=true;
-          Processes.clear();
-          Holes.clear();
-          for (int i = 1; i <=noProcesses ; i++)
-          {  process buffer=new process();
-              HBox b=new HBox();
-              Node hbox=AllProcesses.getChildren().get(i);
-              if(hbox instanceof HBox) {
-                  Node counter = ((HBox) hbox).getChildren().get(1);
-                  if (counter instanceof TextField) {
-                      buffer.setName(((TextField) counter).getText());
-                  }
-                  counter = ((HBox) hbox).getChildren().get(2);
-                  if (counter instanceof TextField) {
-                      try{buffer.setSize(Integer.parseInt(((TextField) counter).getText()));}
-                      catch(NumberFormatException e)
-                      {
-                          buffer.setSize(0);
-                      }
-                  }
-              }
-              Processes.add(buffer);
 
-          }
-          for (int i = 1; i <=noHoles ; i++)
-          {  hole buffer=new hole();
-              HBox b=new HBox();
-              Node hbox=AllHoles.getChildren().get(i);
-              if(hbox instanceof HBox) {
-                  Node counter = ((HBox) hbox).getChildren().get(1);
-                  if (counter instanceof TextField) {
-                     try{ buffer.setStartAddress(Integer.parseInt(((TextField) counter).getText()));}
-                     catch(NumberFormatException e)
-                     {
-                         buffer.setStartAddress(0);
-                     }
-                  }
-                  counter = ((HBox) hbox).getChildren().get(2);
-                  if (counter instanceof TextField) {
-                      try{buffer.setSize(Integer.parseInt(((TextField) counter).getText()));}
-                      catch(NumberFormatException e) {
-                          buffer.setSize(0);
+
+              Processes.clear();
+              Holes.clear();
+              for (int i = 1; i <= noProcesses; i++) {
+                  process buffer = new process();
+                  HBox b = new HBox();
+                  Node hbox = AllProcesses.getChildren().get(i);
+                  if (hbox instanceof HBox) {
+                      Node counter = ((HBox) hbox).getChildren().get(0);
+                      if (counter instanceof Label) {
+                          buffer.setName(((Label) counter).getText());
+                      }
+                      counter = ((HBox) hbox).getChildren().get(1);
+                      if (counter instanceof TextField) {
+                          try {
+                              buffer.setSize(Integer.parseInt(((TextField) counter).getText()));
+                          } catch (NumberFormatException e) {
+                              buffer.setSize(0);
+                          }
                       }
                   }
+                  Processes.add(buffer);
+
               }
-              Holes.add(buffer);
+              for (int i = 1; i <= noHoles; i++) {
+                  hole buffer = new hole();
+                  HBox b = new HBox();
+                  Node hbox = AllHoles.getChildren().get(i);
+                  if (hbox instanceof HBox) {
+                      Node counter = ((HBox) hbox).getChildren().get(1);
+                      if (counter instanceof TextField) {
+                          try {
+                              buffer.setStartAddress(Integer.parseInt(((TextField) counter).getText()));
+                          } catch (NumberFormatException e) {
+                              buffer.setStartAddress(0);
+                          }
+                      }
+                      counter = ((HBox) hbox).getChildren().get(2);
+                      if (counter instanceof TextField) {
+                          try {
+                              buffer.setSize(Integer.parseInt(((TextField) counter).getText()));
+                          } catch (NumberFormatException e) {
+                              buffer.setSize(0);
+                          }
+                      }
+                  }
+                  Holes.add(buffer);
+
+              }
+          sort(Holes,"FF");
+          boolean error=false;
+          for (int i = 0; i <noHoles-1 ; i++) {
+              for (int j = i+1; j <noHoles ; j++) {
+                  if(Holes.elementAt(i).getEndAddress()>Holes.elementAt(j).getStartAddress())
+                  {
+                      error=true;
+                      break;
+                  }
+              }
+          }
+          if(error==true){ Label l = new Label("Holes Overlap ! Please enter the right starts and sizes of holes");
+              AlertBox1.display(l);
+          saved =false;
+          }
+          else
+          {
+
+              ObservableList<String> Process =
+                      FXCollections.observableArrayList(names);
+              Allocation.setItems(Process);
+              DeAllocation.setItems(Process);
 
           }
 
@@ -249,27 +282,27 @@ public class Main extends Application implements EventHandler<ActionEvent> {
       }
       if(event.getSource()==Allocate) {
           if (saved == false) {
-              Label l = new Label("Fill Tables and Press Save first befora allocation");
+              Label l = new Label("Fill Tables  and Press Save first before allocation");
               AlertBox1.display(l);
           } else {
               int toBeAllocated = 0;
               boolean FoundProcess = false;
-              String Name = Allocation.getText();
+              AllocatedName=Allocation.getValue().toString();
               boolean Allocated = false;
-              for (int i = 0; i < noProcesses; i++) {
-                  if (Processes.elementAt(i).getName().equals(Name)) {
-                      toBeAllocated = i;
-                      FoundProcess = true;
-                      break;
+                  for (int i = 0; i < noProcesses; i++) {
+                      if (Processes.elementAt(i).getName().equals(AllocatedName)) {
+                          toBeAllocated = i;
+                          FoundProcess = true;
+                          break;
+                      }
                   }
-              }
-              if (FoundProcess == false) {
-                  Label l = new Label("No Process with such Name is Found");
-                  AlertBox1.display(l);
-              } else if (Processes.elementAt(toBeAllocated).getStartAddress() != -1) {
-                  Label l = new Label("This Process is already allocated");
-                  AlertBox1.display(l);
-              } else if (FirstFit.isSelected()) {
+                  if (FoundProcess == false) {
+                      Label l = new Label("No Process with such Name is Found");
+                      AlertBox1.display(l);
+                  } else if (Processes.elementAt(toBeAllocated).getStartAddress() != -1) {
+                      Label l = new Label("This Process is already allocated");
+                      AlertBox1.display(l);
+                  } else if (FirstFit.isSelected()) {
                   sort(Holes, "FF");
                   for (int i = 0; i < noHoles; i++) {
                       if (Holes.elementAt(i).getSize() >= Processes.elementAt(toBeAllocated).getSize()) {
