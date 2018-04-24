@@ -12,8 +12,6 @@ public class process {
     public process(int size, int startAddress) {
         this.size = size;
         this.startAddress = startAddress;
-
-
     }
 
     public String getName() {

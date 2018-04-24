@@ -13,10 +13,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Vector;
+import javafx.scene.layout.StackPane;
 
 
 public class Main extends Application implements EventHandler<ActionEvent> {
@@ -32,6 +34,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     TextField noOfHolesTextField=new TextField();
     int noProcesses ;
     int noHoles;
+    int memorySize;
     ScrollPane ss;
     ScrollPane sa;
     Label SavingData=new Label("Press Save button To Save the contents of the Tables before allocation");
@@ -46,6 +49,9 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     RadioButton BestFit=new RadioButton("BestFit");
     Vector<process>Processes=new Vector<process>();
     Vector<hole> Holes=new Vector<hole>();
+    TextField memorySizeText =new TextField();
+    Label memorySizeLabel = new Label("Memory Size  ");
+    HBox memorysizeBox = new HBox();
 
     Vector<process> Allocatedprocesses=new Vector<process>();
     ArrayList<String> names = new ArrayList<String >();
@@ -67,8 +73,10 @@ public class Main extends Application implements EventHandler<ActionEvent> {
         Main.setStyle("-fx-background-color: #eae5e5;");
         noOfProcessesLabel.setStyle("-fx-font: 20 arial;  -fx-text-fill: #8f12ce; -fx-font-weight: bold;");
         noOfHolesLabel.setStyle("-fx-font: 20 arial;  -fx-text-fill: #8f12ce; -fx-font-weight: bold;");
+        memorySizeLabel.setStyle("-fx-font: 20 arial;  -fx-text-fill: #8f12ce; -fx-font-weight: bold;");
         noOfHolesTextField.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
         noOfProcessesTextField.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
+        memorySizeText.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
         FirstFit.setStyle("-fx-font: 16 arial;  -fx-text-fill: #000000;");
         BestFit.setStyle("-fx-font: 16 arial;  -fx-text-fill: #000000;");
         Hole.getChildren().addAll(noOfHolesLabel,noOfHolesTextField);
@@ -90,16 +98,19 @@ public class Main extends Application implements EventHandler<ActionEvent> {
         DeAllocation.setStyle("-fx-font: 15 arial; ");
         FirstFit.setToggleGroup(Options);
         BestFit.setToggleGroup(Options);
-        Main.add(Hole,0,4);
-        Main.add(Process,3,4);
+        memorysizeBox.getChildren().addAll(memorySizeLabel,memorySizeText);
+
+        Main.add(Hole,0,5);
+        Main.add(Process,3,5);
         Main.add(options,0,0);
+        Main.add(memorysizeBox,0,4);
         Main.add(FirstFit,0,1);
         Main.add(BestFit,0,2);
-        Main.add(Save,1,8);
-        Main.add(Allocation,0,13);
-        Main.add(Allocate,0,14);
-        Main.add(DeAllocation,0,15);
-        Main.add(DeAllocate,0,16);
+        Main.add(Save,1,9);
+        Main.add(Allocation,0,10);
+        Main.add(Allocate,0,11);
+        Main.add(DeAllocation,0,12);
+        Main.add(DeAllocate,0,13);
         noOfHolesTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable,
@@ -114,7 +125,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                 try {noHoles=Integer.parseInt(noOfHolesTextField.getText());}
                 catch (NumberFormatException e)
                 {noHoles=0;}
-                Label size=new Label("Hole Size");
+                Label size=new Label(" Hole Size");
                 size.setStyle("-fx-font: 16 arial;  -fx-text-fill: #000000; ");
                 Label start=new Label("      Hole Starting Address             ");
                 start.setStyle("-fx-font: 16 arial;  -fx-text-fill: #000000; ");
@@ -122,8 +133,6 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                 v.getChildren().addAll(start,size);
                 AllHoles.add(v,0,0);
                 for (int i = 1; i <=noHoles ; i++) {
-                    Label l=new Label("     ");
-                    Label lll=new Label("   ");
                     TextField Start =new TextField();
                     Start.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
                     TextField Size=new TextField() ;
@@ -131,14 +140,15 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                     Label ll =new Label(Integer.toString(i));
                     ll.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
                     HBox vv=new HBox();
-                    vv.getChildren().addAll(ll,lll,Start,l,Size);
+                    vv.getChildren().addAll(ll,Start,Size);
+                    vv.setSpacing(13);
                     AllHoles.add(vv,0,i);
 
 
                 }
                 ss=new ScrollPane(AllHoles);
-                ss.setFitToHeight(true);
-                Main.add(ss,0,5);
+               // ss.setFitToHeight(true);
+                Main.add(ss,0,6);
             }
         });
         noOfProcessesTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -149,14 +159,13 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                 AllHoles.setPadding(new Insets(10,10,10,10));
                 AllProcesses.getChildren().clear();
                 AllProcesses.setVgap(10);
-                //AllProcesses.setHgap(2);
                 AllProcesses.setPadding(new Insets(10,10,10,10));
                 try {noProcesses=Integer.parseInt(noOfProcessesTextField.getText());}
                 catch (NumberFormatException e)
                 {noProcesses=0;}
                 Label size=new Label("Process Size");
                 size.setStyle("-fx-font: 16 arial;  -fx-text-fill: #000000; ");
-                Label name=new Label("Name                ");
+                Label name=new Label("Name           ");
                 name.setStyle("-fx-font: 16 arial;  -fx-text-fill: #000000; ");
                 HBox v=new HBox();
                 v.getChildren().addAll(name,size);
@@ -169,21 +178,28 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                     Size.setStyle("-fx-font: 15 arial;  -fx-text-fill: #000000; ");
                     HBox vv=new HBox();
                     vv.getChildren().addAll(Name,Size);
-                    vv.setSpacing(80);
+                    vv.setSpacing(40);
                     AllProcesses.add(vv,0,i);
 
 
                 }
                 sa=new ScrollPane(AllProcesses);
                 sa.setFitToHeight(true);
-                Main.add(sa,3,5);
+                Main.add(sa,3,6);
             }
         });
 
+        ScrollPane sp =new ScrollPane();
+        sp.setContent(Main);
+        sp.setFitToWidth(true);
+        sp.setFitToHeight(true);
         primaryStage.setTitle("Memory Allocation");
-        primaryStage.setScene(new Scene(Main, 300, 275));
+        primaryStage.setScene(new Scene(sp, 300, 275));
         primaryStage.setMaximized(true);
+        primaryStage.setMinWidth(900);
+        primaryStage.setMinHeight(300);
         primaryStage.show();
+
     }
     public void sort(Vector<hole> holes, String method) {   // "FF" for first fit & "BF" for best fit
         hole temp;
@@ -224,15 +240,17 @@ public class Main extends Application implements EventHandler<ActionEvent> {
         }
     }
     @Override
+
     public void handle(ActionEvent event) {
+
+//============== save ==============================================================================
 
         if(event.getSource()==Save)
         {
             saved=true;
-
-
             Processes.clear();
             Holes.clear();
+            Allocatedprocesses.clear();
             for (int i = 1; i <= noProcesses; i++) {
                 process buffer = new process();
                 HBox b = new HBox();
@@ -294,17 +312,51 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                 AlertBox1.display(l);
                 saved =false;
             }
+            else if(memorySizeText.getText().equals(""))
+            {
+                Label l=new Label("Please Enter the Memory Size");
+                AlertBox1.display(l);
+            }
             else
             {
+                memorySize=Integer.parseInt(memorySizeText.getText());
 
                 ObservableList<String> Process =
                         FXCollections.observableArrayList(names);
+                ObservableList<String> deprocess =
+                        FXCollections.observableArrayList();
+
+                int no=0;
+                if(Holes.size()>=1&&Holes.get(0).getStartAddress()!=0)
+                {
+                    process buffer = new process(Holes.get(0).getStartAddress(),0,"Block"+no);
+                    deprocess.add(buffer.getName());
+                    Allocatedprocesses.add(buffer);
+                    no++;
+                }
+                for(int i=0;i<Holes.size();i++)
+                {
+                    if (i==Holes.size()-1)
+                    {
+                        process buffer = new process(memorySize-Holes.get(i).getEndAddress(),Holes.get(i).getEndAddress()+1,"Block"+no);
+                        deprocess.add(buffer.getName());
+                        Allocatedprocesses.add(buffer);
+                    }
+                    else
+                    {
+                        process buffer = new process(Holes.get(i+1).getStartAddress()-Holes.get(i).getEndAddress()-1,Holes.get(i).getEndAddress()+1,"Block"+no);
+                        deprocess.add(buffer.getName());
+                        Allocatedprocesses.add(buffer);
+                    }
+                    no++;
+                }
+
                 Allocation.setItems(Process);
-                DeAllocation.setItems(Process);
+                DeAllocation.setItems(deprocess);
 
             }
 
-
+//============== Allocate ==============================================================================
         }
         if(event.getSource()==Allocate) {
             if (saved == false) {
@@ -376,31 +428,34 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 
                     }
                 }
+                else {
+                    Label l = new Label("Please shows Allocation Method");
+                    AlertBox1.display(l);
+                }
             }
         }
+//============== Deallocate ==============================================================================
+
         if(event.getSource()==DeAllocate)
         {
             String userIn=DeAllocation.getValue().toString();
             boolean holeBefore=false; boolean holeAfter=false;
-            int holes[]=new int[2];   //holes[0] is the index of the hole before process  holes[1] is the hole after
-            System.out.println("Deallocate");
+            int holes[]=new int[2];   //holes[0] is the index of the hole before process  holes[1] is the index of hole after
             for(int i=0;i<Allocatedprocesses.size();i++)
-            {System.out.println(userIn+"     "+Allocatedprocesses.get(i).getName());
+            {
                 if(Allocatedprocesses.get(i).getName().equals(userIn))
-                {System.out.println(Allocatedprocesses.get(i).getName());
+                {
                     for(int j=0;j<Holes.size();j++)
                     {
                         if(Allocatedprocesses.get(i).getStartAddress()==Holes.get(j).getEndAddress()+1)
                         {
                             holeBefore=true;
                             holes[0]=j;
-                            System.out.println("before");
                         }
                         if(Allocatedprocesses.get(i).getEndAddress()==Holes.get(j).getStartAddress()-1)
                         {
                             holeAfter=true;
                             holes[1]=j;
-                            System.out.println("After");
                         }
                     }
                     if(holeBefore&&holeAfter)  // there is hole before and after it
@@ -408,7 +463,6 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                         Holes.get(holes[0]).setSize(Holes.get(holes[0]).getSize()+
                                 Holes.get(holes[1]).getSize()+ Allocatedprocesses.get(i).getSize());   //set the size of this hole= size of this hole + size of process + size of the hole after the process
                         Holes.remove(holes[1]);   //remove the hole after the process
-                        System.out.println("before and after");
                     }
                     else if(holeBefore)
                     {
