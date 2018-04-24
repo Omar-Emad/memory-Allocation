@@ -1,54 +1,119 @@
 package sample;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.util.List;
 import java.util.Vector;
 
 
+
 public class ResultWindow {
-    public static void display(Vector<hole> l,Vector<process> p,Stage window)
+    public static void display(Vector<hole> H,Vector<process> P,Stage window,int MemorySize)
     {
-
         Scene scene;
-        TableView Holes = new TableView();
-        TableView AllocatedMemory = new TableView();
-        Holes.setEditable(true);
-        AllocatedMemory.setEditable(true);
-        TableColumn HoleStart = new TableColumn("Hole Start");
-        TableColumn HoleSize = new TableColumn("Hole Size");
-        TableColumn AllocatedBlockStart = new TableColumn("AllocatedBlockStart");
-        TableColumn AllocatedBlockSize = new TableColumn("AllocatedBlockSize");
-        TableColumn AllocatedBlockProcess = new TableColumn("ProcessAllocatedBy");
-        List <hole> ll=l;
-        List <process> pp=p;
-        final ObservableList<hole> Hole= FXCollections.observableList(ll);
-        final ObservableList<process> Process=FXCollections.observableList(pp);
-        HoleStart.setCellValueFactory(new PropertyValueFactory<hole,Integer>("startAddress"));
-        HoleSize.setCellValueFactory(new PropertyValueFactory<hole,Integer>("size"));
-        AllocatedBlockStart.setCellValueFactory(new PropertyValueFactory<process,Integer>("startAddress"));
-        AllocatedBlockSize.setCellValueFactory(new PropertyValueFactory<process,Integer>("size"));
-        AllocatedBlockProcess.setCellValueFactory(new PropertyValueFactory<process,String>("Name"));
+
+        
+
         GridPane grid=new GridPane();
-        Holes.setItems(Hole);
-        AllocatedMemory.setItems(Process);
-        Holes.getColumns().addAll(HoleStart,HoleSize);
-        AllocatedMemory.getColumns().addAll(AllocatedBlockStart,AllocatedBlockSize,AllocatedBlockProcess);
-        AllocatedMemory.setMinWidth(100);
+        int Hsize=H.size();
+        int Psize=P.size();
+        int Holescounter=0;
+        int Processcounter=0;
+        int gridcounter=0  ;
+        while((Holescounter< Hsize) && (Processcounter<Psize))
+        {
+             if(H.elementAt(Holescounter).getStartAddress()<=P.elementAt(Processcounter).getStartAddress())
+             {
+
+                 Label label = new Label();
+                 Label ad=new Label("Starting Address : "+Integer.toString(H.elementAt(Holescounter).getStartAddress()));
+                 ad.setStyle("-fx-background-color: GREEN ; -fx-padding: 10px;");
+                 ad.setMinWidth(300);
+                 Label Address=new Label("Ending Address : "+Integer.toString(H.elementAt(Holescounter).getEndAddress()));
+                 label.setStyle("-fx-background-color: GREEN ; -fx-padding: 10px;");
+                 Address.setStyle("-fx-background-color: GREEN ; -fx-padding: 10px;");
+                 label.setMinHeight((H.elementAt(Holescounter).getSize()) * (500 / MemorySize));
+                 Address.setMinWidth(300);
+                 label.setMinWidth(300);
+                 VBox ALL=new VBox();
+                 ALL.getChildren().addAll(ad,label,Address);
+                 grid.add(ALL, 0, gridcounter);
+                 Holescounter++;
+                 gridcounter++;
+             }
+             else
+             {
+
+                 Label ad=new Label("Starting Address : "+Integer.toString(P.elementAt(Processcounter).getStartAddress()));
+                 ad.setStyle("-fx-background-color: RED ; -fx-padding: 10px;");
+                 ad.setMinWidth(300);
+                 Label label = new Label(P.elementAt(Processcounter).getName());
+                 Label Address=new Label("Ending Address : "+Integer.toString(P.elementAt(Processcounter).getEndAddress()));
+                 label.setStyle("-fx-background-color: RED ; -fx-padding: 10px;");
+                 Address.setStyle("-fx-background-color: RED ; -fx-padding: 10px;");
+                 label.setMinHeight((P.elementAt(Processcounter).getSize()) * (500 / MemorySize));
+                 Address.setMinWidth(300);
+                 label.setMinWidth(300);
+                 VBox ALL=new VBox();
+                 ALL.getChildren().addAll(ad,label,Address);
+                 grid.add(ALL, 0, gridcounter);
+                 Processcounter++;
+                 gridcounter++;
+             }
 
 
-        // grid.setColumnSpan(AllocatedMemory,2);
-        grid.add(Holes,0,0);
-        grid.add(AllocatedMemory,1,0);
-        grid.setHgrow(AllocatedMemory, Priority.ALWAYS);
-        scene = new Scene(grid,800,300);
+
+        }
+        if(Holescounter<Hsize)
+        {
+            while(Holescounter< Hsize)
+            {   Label ad=new Label("Starting Address : "+Integer.toString(H.elementAt(Holescounter).getStartAddress()));
+                ad.setStyle("-fx-background-color: GREEN ; -fx-padding: 10px;");
+                ad.setMinWidth(300);
+                Label label = new Label();
+                Label Address=new Label("Ending Address : "+Integer.toString(H.elementAt(Holescounter).getEndAddress()));
+                label.setStyle("-fx-background-color: GREEN ; -fx-padding: 10px;");
+                Address.setStyle("-fx-background-color: GREEN ; -fx-padding: 10px;");
+                label.setMinHeight((H.elementAt(Holescounter).getSize()) * (500 / MemorySize));
+                Address.setMinWidth(300);
+                label.setMinWidth(300);
+                VBox ALL=new VBox();
+                ALL.getChildren().addAll(ad,label,Address);
+                grid.add(ALL, 0, gridcounter);
+
+                Holescounter++;
+                gridcounter++;
+            }
+
+        }
+        if((Processcounter<Psize))
+        {
+            while(Processcounter<Psize)
+            {
+                Label ad=new Label("Starting Address : "+Integer.toString(P.elementAt(Processcounter).getStartAddress()));
+                ad.setStyle("-fx-background-color: Red ; -fx-padding: 10px;");
+                ad.setMinWidth(300);
+                Label label = new Label(P.elementAt(Processcounter).getName());
+                Label Address=new Label("Ending Address : "+Integer.toString(P.elementAt(Processcounter).getEndAddress()));
+                label.setStyle("-fx-background-color: RED ; -fx-padding: 10px;");
+                Address.setStyle("-fx-background-color: RED ; -fx-padding: 10px;");
+                label.setMinHeight((P.elementAt(Processcounter).getSize()) * (500 / MemorySize));
+                Address.setMinWidth(300);
+                label.setMinWidth(300);
+                VBox ALL=new VBox();
+                ALL.getChildren().addAll(ad,label,Address);
+                grid.add(ALL, 0, gridcounter);
+                Processcounter++;
+                gridcounter++;
+            }
+        }
+        ScrollPane ss=new ScrollPane(grid);
+        ss.setFitToHeight(true);
+        scene = new Scene(ss,400,500);
         window.setScene(scene);
         window.show();
 
