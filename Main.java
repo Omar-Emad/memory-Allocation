@@ -147,7 +147,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 
                 }
                 ss=new ScrollPane(AllHoles);
-               // ss.setFitToHeight(true);
+                // ss.setFitToHeight(true);
                 Main.add(ss,0,6);
             }
         });
@@ -401,7 +401,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                         AlertBox1.display(l);
                     } else {
                         window.close();
-                        ResultWindow.display(Holes, Allocatedprocesses, window);
+                        ResultWindow.display(Holes, Allocatedprocesses, window,memorySize);
                     }
                 } else if (BestFit.isSelected()) {
                     sort(Holes, "BF");
@@ -424,7 +424,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                         AlertBox1.display(l);
                     } else {
                         window.close();
-                        ResultWindow.display(Holes, Allocatedprocesses, window);
+                        ResultWindow.display(Holes, Allocatedprocesses, window,memorySize);
 
                     }
                 }
@@ -490,7 +490,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                 }
             }
             window.close();
-            ResultWindow.display(Holes, Allocatedprocesses, window);
+            ResultWindow.display(Holes, Allocatedprocesses, window,memorySize);
 
         }
     }
