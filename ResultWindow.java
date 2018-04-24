@@ -15,6 +15,9 @@ public class ResultWindow {
     public static void display(Vector<hole> H,Vector<process> P,Stage window,int MemorySize)
     {
         Scene scene;
+
+        
+
         GridPane grid=new GridPane();
         int Hsize=H.size();
         int Psize=P.size();

@@ -1,10 +1,10 @@
-
+package sample;
 
 public class process {
 
-     int size;
-     int startAddress;
-    String Name ;
+   private int size;
+    private int startAddress;
+    private String Name ;
     public process() {
         startAddress=-1;
     }
@@ -12,8 +12,6 @@ public class process {
     public process(int size, int startAddress) {
         this.size = size;
         this.startAddress = startAddress;
-
-
     }
 
     public String getName() {
@@ -36,6 +34,10 @@ public class process {
 
     public int getStartAddress() {
         return startAddress;
+    }
+
+    public int getEndAddress() {
+        return startAddress+size-1;
     }
 
     public void setSize(int size) {
