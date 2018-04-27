@@ -11,14 +11,13 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Vector;
-import javafx.scene.layout.StackPane;
 
 
 public class Main extends Application implements EventHandler<ActionEvent> {
@@ -71,7 +70,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
         Main.setPadding(new Insets(40, 40, 40, 40));
         Main.setVgap(20);
         Main.setHgap(30);
-        Main.setStyle("-fx-background-color: #eae5e5;");
+        Main.setStyle("-fx-background-color: #bcb5b7;");
         noOfProcessesLabel.setStyle("-fx-font: 20 arial;  -fx-text-fill: #8f12ce; -fx-font-weight: bold;");
         noOfHolesLabel.setStyle("-fx-font: 20 arial;  -fx-text-fill: #8f12ce; -fx-font-weight: bold;");
         memorySizeLabel.setStyle("-fx-font: 20 arial;  -fx-text-fill: #8f12ce; -fx-font-weight: bold;");
@@ -84,9 +83,9 @@ public class Main extends Application implements EventHandler<ActionEvent> {
         Process.getChildren().addAll(noOfProcessesLabel,noOfProcessesTextField);
         SavingData.setFont(new Font("Arial", 17));
         options.setStyle("-fx-font: 20 arial;  -fx-text-fill: #8f12ce; -fx-font-weight: bold;");
-        Save.setStyle("-fx-font: 17 arial; -fx-background-color: linear-gradient(#8f12ce,#eae5e5) ;  -fx-text-fill: #1c1b1b; -fx-background-radius: 7;");
-        Allocate.setStyle("-fx-font: 17 arial; -fx-background-color: linear-gradient(#8f12ce,#eae5e5) ;  -fx-text-fill: #1c1b1b; -fx-background-radius: 7;");
-        DeAllocate.setStyle("-fx-font: 17 arial; -fx-background-color: linear-gradient(#8f12ce,#eae5e5) ;  -fx-text-fill: #1c1b1b; -fx-background-radius: 7;");
+        Save.setStyle("-fx-font: 17 arial; -fx-background-color: linear-gradient(#8f12ce,#bcb5b7) ;  -fx-text-fill: #1c1b1b; -fx-background-radius: 7;");
+        Allocate.setStyle("-fx-font: 17 arial; -fx-background-color: linear-gradient(#8f12ce,#bcb5b7) ;  -fx-text-fill: #1c1b1b; -fx-background-radius: 7;");
+        DeAllocate.setStyle("-fx-font: 17 arial; -fx-background-color: linear-gradient(#8f12ce,#bcb5b7) ;  -fx-text-fill: #1c1b1b; -fx-background-radius: 7;");
         Save.setText("Save");
         Allocate.setText("Allocate");
         Save.setOnAction(this);
@@ -201,12 +200,13 @@ public class Main extends Application implements EventHandler<ActionEvent> {
         primaryStage.setMinHeight(300);
         primaryStage.show();
 
+
     }
     public  void sortProcess(Vector<process> process,String method)   //"Address"   or   ""Name"
     {
         process temp;
         boolean swap;
-        if (method == "Name") {
+        if (method == "Address") {
             for(int i=0;i<process.size()-1;i++)
             {
                 swap=false;
@@ -223,7 +223,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                 if(!swap) break;
             }
             //------------------------------------------
-        } else if (method == "Address") {
+        } else if (method == "Name") {
             for(int i=0;i<process.size()-1;i++)
             {
                 swap=false;
@@ -392,6 +392,10 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                 Allocation.setItems(Process);
                 DeAllocation.setItems(deprocess);
 
+                sort(Holes, "FF");
+                sortProcess(Allocatedprocesses,"Address");
+                ResultWindow.display(Holes, Allocatedprocesses, window,memorySize);
+
             }
 
 //============== Allocate ==============================================================================
@@ -439,6 +443,9 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                         AlertBox1.display(l);
                     } else {
                         window.close();
+                        sort(Holes, "FF");
+                        sortProcess(Allocatedprocesses,"Address");
+                        for(int ii=0;ii<Allocatedprocesses.size();ii++)System.out.println(Allocatedprocesses.get(ii).getStartAddress());
                         ResultWindow.display(Holes, Allocatedprocesses, window,memorySize);
                         deprocess.add(Processes.elementAt(toBeAllocated).getName());
                     }
@@ -463,6 +470,8 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                         AlertBox1.display(l);
                     } else {
                         window.close();
+                        sort(Holes, "FF");
+                        sortProcess(Allocatedprocesses,"Address");
                         ResultWindow.display(Holes, Allocatedprocesses, window,memorySize);
                         deprocess.add(Processes.elementAt(toBeAllocated).getName());
 
@@ -524,19 +533,20 @@ public class Main extends Application implements EventHandler<ActionEvent> {
                     Allocatedprocesses.remove(i);
 
                     sort(Holes,"FF");
-                    sortProcess(Allocatedprocesses,"Address");
 
                     break;
                 }
-                System.out.println("hello");
-                sortProcess(Allocatedprocesses,"Name");
-                deprocess.clear();
-                for(int j=0;j<Allocatedprocesses.size();j++)
-                {
-                    deprocess.add(Allocatedprocesses.get(j).getName());
-                }
-
             }
+
+            System.out.println("hello");
+            sortProcess(Allocatedprocesses,"Name");
+            deprocess.clear();
+            for(int j=0;j<Allocatedprocesses.size();j++)
+            {
+                deprocess.add(Allocatedprocesses.get(j).getName());
+            }
+
+            sortProcess(Allocatedprocesses,"Address");
             window.close();
             ResultWindow.display(Holes, Allocatedprocesses, window,memorySize);
 
