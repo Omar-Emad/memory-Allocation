@@ -16,7 +16,7 @@ public class ResultWindow {
     {
         Scene scene;
 
-        
+
 
         GridPane grid=new GridPane();
         int Hsize=H.size();
@@ -26,44 +26,44 @@ public class ResultWindow {
         int gridcounter=0  ;
         while((Holescounter< Hsize) && (Processcounter<Psize))
         {
-             if(H.elementAt(Holescounter).getStartAddress()<=P.elementAt(Processcounter).getStartAddress())
-             {
+            if(H.elementAt(Holescounter).getStartAddress()<=P.elementAt(Processcounter).getStartAddress())
+            {
 
-                 Label label = new Label();
-                 Label ad=new Label("Starting Address : "+Integer.toString(H.elementAt(Holescounter).getStartAddress()));
-                 ad.setStyle("-fx-background-color: GREEN ; -fx-padding: 10px;");
-                 ad.setMinWidth(300);
-                 Label Address=new Label("Ending Address : "+Integer.toString(H.elementAt(Holescounter).getEndAddress()));
-                 label.setStyle("-fx-background-color: GREEN ; -fx-padding: 10px;");
-                 Address.setStyle("-fx-background-color: GREEN ; -fx-padding: 10px;");
-                 label.setMinHeight((H.elementAt(Holescounter).getSize()) * (500 / MemorySize));
-                 Address.setMinWidth(300);
-                 label.setMinWidth(300);
-                 VBox ALL=new VBox();
-                 ALL.getChildren().addAll(ad,label,Address);
-                 grid.add(ALL, 0, gridcounter);
-                 Holescounter++;
-                 gridcounter++;
-             }
-             else
-             {
+                Label label = new Label();
+                Label ad=new Label("Starting Address : "+Integer.toString(H.elementAt(Holescounter).getStartAddress()));
+                ad.setStyle("-fx-background-color: #e8e5ea ; -fx-padding: 10px;");
+                ad.setMinWidth(300);
+                Label Address=new Label("Ending Address : "+Integer.toString(H.elementAt(Holescounter).getEndAddress()));
+                label.setStyle("-fx-background-color: #e8e5ea ; -fx-padding: 10px;");
+                Address.setStyle("-fx-background-color: #e8e5ea ; -fx-padding: 10px;");
+                label.setMinHeight((H.elementAt(Holescounter).getSize()) * (500 / MemorySize));
+                Address.setMinWidth(300);
+                label.setMinWidth(300);
+                VBox ALL=new VBox();
+                ALL.getChildren().addAll(ad,label,Address);
+                grid.add(ALL, 0, gridcounter);
+                Holescounter++;
+                gridcounter++;
+            }
+            else
+            {
 
-                 Label ad=new Label("Starting Address : "+Integer.toString(P.elementAt(Processcounter).getStartAddress()));
-                 ad.setStyle("-fx-background-color: RED ; -fx-padding: 10px;");
-                 ad.setMinWidth(300);
-                 Label label = new Label(P.elementAt(Processcounter).getName());
-                 Label Address=new Label("Ending Address : "+Integer.toString(P.elementAt(Processcounter).getEndAddress()));
-                 label.setStyle("-fx-background-color: RED ; -fx-padding: 10px;");
-                 Address.setStyle("-fx-background-color: RED ; -fx-padding: 10px;");
-                 label.setMinHeight((P.elementAt(Processcounter).getSize()) * (500 / MemorySize));
-                 Address.setMinWidth(300);
-                 label.setMinWidth(300);
-                 VBox ALL=new VBox();
-                 ALL.getChildren().addAll(ad,label,Address);
-                 grid.add(ALL, 0, gridcounter);
-                 Processcounter++;
-                 gridcounter++;
-             }
+                Label ad=new Label("Starting Address : "+Integer.toString(P.elementAt(Processcounter).getStartAddress()));
+                ad.setStyle("-fx-background-color: #3e4144 ; -fx-padding: 10px; -fx-text-fill: #ace285;");
+                ad.setMinWidth(300);
+                Label label = new Label(P.elementAt(Processcounter).getName());
+                Label Address=new Label("Ending Address : "+Integer.toString(P.elementAt(Processcounter).getEndAddress()));
+                label.setStyle("-fx-background-color: #3e4144 ; -fx-padding: 10px; -fx-text-fill: #be7cea;");
+                Address.setStyle("-fx-background-color: #3e4144 ; -fx-padding: 10px; -fx-text-fill: #ace285;");
+                label.setMinHeight((P.elementAt(Processcounter).getSize()) * (500 / MemorySize));
+                Address.setMinWidth(300);
+                label.setMinWidth(300);
+                VBox ALL=new VBox();
+                ALL.getChildren().addAll(ad,label,Address);
+                grid.add(ALL, 0, gridcounter);
+                Processcounter++;
+                gridcounter++;
+            }
 
 
 
@@ -72,12 +72,12 @@ public class ResultWindow {
         {
             while(Holescounter< Hsize)
             {   Label ad=new Label("Starting Address : "+Integer.toString(H.elementAt(Holescounter).getStartAddress()));
-                ad.setStyle("-fx-background-color: GREEN ; -fx-padding: 10px;");
+                ad.setStyle("-fx-background-color: #e8e5ea ; -fx-padding: 10px;");
                 ad.setMinWidth(300);
                 Label label = new Label();
                 Label Address=new Label("Ending Address : "+Integer.toString(H.elementAt(Holescounter).getEndAddress()));
-                label.setStyle("-fx-background-color: GREEN ; -fx-padding: 10px;");
-                Address.setStyle("-fx-background-color: GREEN ; -fx-padding: 10px;");
+                label.setStyle("-fx-background-color: #e8e5ea ; -fx-padding: 10px;");
+                Address.setStyle("-fx-background-color: #e8e5ea ; -fx-padding: 10px;");
                 label.setMinHeight((H.elementAt(Holescounter).getSize()) * (500 / MemorySize));
                 Address.setMinWidth(300);
                 label.setMinWidth(300);
@@ -95,12 +95,12 @@ public class ResultWindow {
             while(Processcounter<Psize)
             {
                 Label ad=new Label("Starting Address : "+Integer.toString(P.elementAt(Processcounter).getStartAddress()));
-                ad.setStyle("-fx-background-color: Red ; -fx-padding: 10px;");
+                ad.setStyle("-fx-background-color: #3e4144 ; -fx-padding: 10px; -fx-text-fill: #ace285;");
                 ad.setMinWidth(300);
                 Label label = new Label(P.elementAt(Processcounter).getName());
                 Label Address=new Label("Ending Address : "+Integer.toString(P.elementAt(Processcounter).getEndAddress()));
-                label.setStyle("-fx-background-color: RED ; -fx-padding: 10px;");
-                Address.setStyle("-fx-background-color: RED ; -fx-padding: 10px;");
+                label.setStyle("-fx-background-color: #3e4144 ; -fx-padding: 10px; -fx-text-fill: #be7cea;");
+                Address.setStyle("-fx-background-color: #3e4144 ; -fx-padding: 10px; -fx-text-fill: #ace285;");
                 label.setMinHeight((P.elementAt(Processcounter).getSize()) * (500 / MemorySize));
                 Address.setMinWidth(300);
                 label.setMinWidth(300);
