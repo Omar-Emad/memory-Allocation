@@ -112,7 +112,6 @@ public class ResultWindow {
             }
         }
         ScrollPane ss=new ScrollPane(grid);
-        ss.setFitToHeight(true);
         scene = new Scene(ss,400,500);
         window.setScene(scene);
         window.show();
